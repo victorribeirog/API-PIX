@@ -14,4 +14,8 @@ public class TransferirResponse {
     private Boolean sucesso;
     private String mensagem;
     UUID codigoTransacao;
+
+    public boolean isSucesso(){
+        return sucesso;
+    }
 }
