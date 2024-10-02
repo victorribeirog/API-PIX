@@ -23,12 +23,13 @@ public class PagamentoPixController {
     public ResponseEntity<TransferirResponse> pagarPix(
             @RequestHeader("IdempotencyKey") String idempotencyKey,
             @RequestHeader(value = "IgnoraHandshake", defaultValue = "true") boolean ignoraHandshake,
-            @RequestBody TransferirRequest transferirRequest){
-        TransferirResponse response = pagarPixChaveService.transferir(idempotencyKey, ignoraHandshake,transferirRequest);
-
-        return response.isSucesso()
-                ? ResponseEntity.ok(response)
-                : ResponseEntity.status(HttpStatus.CONFLICT).body(response);
+            @RequestBody TransferirRequest transferirRequest) {
+        try {
+            TransferirResponse response = pagarPixChaveService.transferir(idempotencyKey, ignoraHandshake, transferirRequest);
+            return ResponseEntity.ok(response);
+        } catch (IllegalStateException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(null);
+        }
     }
 
 }

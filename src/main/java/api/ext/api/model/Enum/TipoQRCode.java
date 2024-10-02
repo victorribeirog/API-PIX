@@ -1,12 +1,9 @@
 package api.ext.api.model.Enum;
 
 public enum TipoQRCode {
-    Estatico(1), Dinamico(2);
-
-    private final int tipo;
+    Estatico(0), Dinamico(1);
 
     TipoQRCode (int tipoQRCODE){
-        tipo = tipoQRCODE;
     }
 
 }

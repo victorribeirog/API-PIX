@@ -23,10 +23,19 @@ public class PagarPixChaveServiceImpl implements PagarPixChaveService {
 
     @Override
     public TransferirResponse transferir(String idempotencyKey, boolean ignoraHandshake, TransferirRequest transferirRequest) {
+        // Verifica se a transação já foi realizada com a mesma idempotencyKey
         Optional<PagamentoPixChave> existingPagamentoPixChave = pixChaveRepository.findByIdempotencyKey(idempotencyKey);
+
         if (existingPagamentoPixChave.isPresent()) {
-            return mapToResponse(existingPagamentoPixChave.get());
+            PagamentoPixChave pagamentoPixChave = existingPagamentoPixChave.get();
+
+            if (pagamentoPixChave.isSucesso()) {
+                throw new IllegalStateException("A operação com esta IdempotencyKey já foi realizada.");
+            } else {
+                throw new IllegalStateException("A operação com esta IdempotencyKey já foi tentada anteriormente e falhou.");
+            }
         }
+
 
         PagamentoPixChave transferencia = new PagamentoPixChave();
         transferencia.setDadosEnvioPorChave(transferirRequest.getDadosEnvioPorChave());
@@ -42,6 +51,7 @@ public class PagarPixChaveServiceImpl implements PagarPixChaveService {
         transferencia.setIdempotencyKey(idempotencyKey);
         transferencia.setIgnoraHandshake(ignoraHandshake);
 
+
         transferencia.setSucesso(true);
         transferencia.setMensagem("Pagamento via chave Pix realizado com sucesso.");
         transferencia.setCodigoTransacao(UUID.randomUUID().toString());
@@ -53,21 +63,19 @@ public class PagarPixChaveServiceImpl implements PagarPixChaveService {
 
     @Override
     public Optional<TransferirResponse> findByIdempotencyKey(String idempotencyKey) {
-        // Implementação do método de busca por idempotencyKey
-        return Optional.empty(); // Apenas um exemplo, ajuste conforme necessário
+
+        return Optional.empty();
     }
 
     @Override
     public void saveTransaction(String idempotencyKey, TransferirResponse response) {
-        // Implemente a lógica para salvar a transação
-        // Isso pode envolver salvar no banco de dados ou fazer algum log
+
         PagamentoPixChave pagamentoPixChave = new PagamentoPixChave();
         pagamentoPixChave.setIdempotencyKey(idempotencyKey);
         pagamentoPixChave.setCodigoTransacao(String.valueOf(response.getCodigoTransacao()));
         pagamentoPixChave.setMensagem(response.getMensagem());
         pagamentoPixChave.setSucesso(response.isSucesso());
 
-        // Salva no repositório
         pixChaveRepository.save(pagamentoPixChave);
     }
 
@@ -75,7 +83,7 @@ public class PagarPixChaveServiceImpl implements PagarPixChaveService {
         TransferirResponse transferirResponse = new TransferirResponse();
         transferirResponse.setMensagem(pagamentoPixChave.getMensagem());
 
-        // Se 'codigoTransacao' já é uma String, não tente converter novamente para UUID
+
         transferirResponse.setCodigoTransacao(UUID.fromString(pagamentoPixChave.getCodigoTransacao()));
 
         transferirResponse.setSucesso(pagamentoPixChave.isSucesso());

@@ -2,7 +2,6 @@ package api.ext.api.model;
 
 import api.ext.api.model.Enum.PrioridadePix;
 import api.ext.api.model.Enum.TipoQRCode;
-import api.ext.api.model.ContaDto;
 import api.ext.api.model.Request.EnvioPorChaveRequest;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -22,7 +21,7 @@ public class PagamentoPixChave {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Embedded // Se a classe EnvioPorChaveRequest for uma entidade
+    @Embedded
     private EnvioPorChaveRequest dadosEnvioPorChave;
 
     private Double valor;
@@ -30,18 +29,18 @@ public class PagamentoPixChave {
     private String descricaoCliente;
     private PrioridadePix prioridadePix;
 
-    @Transient
+    @Embedded
     private ContaDto contaOrigem;
 
     private String informacoesAdicionais;
     private String idConciliacaoRecebedor;
     private TipoQRCode tipoQRCode;
+
     private String codigoLeituraQRCode;
     private String idempotencyKey;
     private boolean ignoraHandshake;
 
-    // Novos campos adicionados
-    private boolean sucesso; // Indica se a transação foi bem-sucedida
-    private String mensagem; // Mensagem do resultado da transação
-    private String codigoTransacao; // Código da transação
+    private boolean sucesso;
+    private String mensagem;
+    private String codigoTransacao;
 }

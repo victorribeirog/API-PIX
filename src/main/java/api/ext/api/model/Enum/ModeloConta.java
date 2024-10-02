@@ -2,11 +2,8 @@ package api.ext.api.model.Enum;
 
 public enum ModeloConta {
 
-    Movimento(1), Escrow(2), Vinculada(3);
-
-    private final int modelo;
+    Movimento(0), Escrow(1), Vinculada(2);
 
     ModeloConta (int modeloConta){
-        modelo = modeloConta;
     }
 }

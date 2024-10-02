@@ -12,16 +12,15 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-
 public class TransferirRequest {
-    EnvioPorChaveRequest dadosEnvioPorChave;
-    Double valor;
-    String codigoOperacaoCliente;
-    String descricaoCliente;
-    PrioridadePix prioridadePix;
-    ContaDto contaOrigem;
-    String informacoesAdicionais;
-    String idConciliacaoRecebedor;
-    TipoQRCode tipoQRCode;
-    String codigoLeituraQRCode;
+    private EnvioPorChaveRequest dadosEnvioPorChave;
+    private Double valor;
+    private String codigoOperacaoCliente;
+    private String descricaoCliente;
+    private PrioridadePix prioridadePix;
+    private ContaDto contaOrigem;
+    private  String informacoesAdicionais;
+    private  String idConciliacaoRecebedor;
+    private TipoQRCode tipoQRCode;
+    private  String codigoLeituraQRCode;
 }

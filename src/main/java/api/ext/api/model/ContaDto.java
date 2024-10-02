@@ -7,6 +7,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -17,6 +20,8 @@ public class ContaDto {
     String conta;
     String contaDigito;
     String contaPgto;
+
     TipoConta tipoConta;
+
     ModeloConta modeloConta;
 }
